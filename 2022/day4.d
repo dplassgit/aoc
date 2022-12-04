@@ -77,9 +77,9 @@ any_covers: proc(s:string): bool {
   r1 = split(es[0], '-')
   r2 = split(es[1], '-')
   range1=parse(r1)
-  print "range1: " println range1
+  //print "range1: " println range1
   range2=parse(r2)
-  print "range2: " println range2
+  //print "range2: " println range2
   return 
      (range2[0] <= range1[0] and range1[0] <= range2[1]) OR 
      (range2[0] <= range1[1] and range1[1] <= range2[1]) OR 
@@ -102,10 +102,10 @@ part2: proc {
   covered = 0
   x = next_line() while x != null do x = next_line() {
     if any_covers(x) {
-      println x + " is covered"
+      // println x + " is covered"
       covered = covered + 1
     } else {
-      println x + " is not covered"
+      // println x + " is not covered"
     }
   }
   print "part2: " println covered
