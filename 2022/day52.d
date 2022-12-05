@@ -150,12 +150,10 @@ process_command: proc(count: int, from:int, to:int) {
     val = pop(stacks[from])
     push(temp, val)
   }
-  print "temp list to move: " printList(temp)
   i = 0 while i < count do i = i + 1 {
     val = pop(temp)
     push(stacks[to], val)
   }
-  print "after moved: " printList(stacks[to])
 }
 
 // 2. process each command
@@ -176,6 +174,7 @@ i = 1 while i < 10 do i = i + 1 {
   printList(stacks[i])
 }
 
+println "Answer:"
 i = 1 while i < 10 do i = i + 1 {
   h = head(stacks[i])
   if h != null {
