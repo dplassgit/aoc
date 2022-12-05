@@ -1,8 +1,6 @@
-atoi: extern proc(s:string):int
-
 // test this with other inputs, e.g.,
-// global_data = 'foo,bar'
-// global_data=input
+//global_data = 'foo,bar'
+global_data=input
 
 loc=0
 // Get the next line. Returns null at EOF.
@@ -96,15 +94,19 @@ pop: proc(list: DList): DValue {
 
 head: proc(list: DList): DValue {
   if list.head == null {
-    exit "head of list is null"
+    return null
   }
   return list.head.value
 }
 
 printList: proc(list: DList) {
   tail = list.head while tail != null do tail = tail.next {
-    println tail.value.value
+    print tail.value.value
+    if tail.next != null {
+      print ", "
+    }
   }
+  println ""
 }
 
 makeDValue: proc(v:string):DValue {
@@ -113,22 +115,71 @@ makeDValue: proc(v:string):DValue {
   return dval
 }
 
-//list = new DList
-//append(list, makeDValue("hi"))
-//printList(list) println "-"
-//push(list, makeDValue("first"))
-//printList(list) println "-"
-//append(list, makeDValue("bye"))
-//printList(list) println "-"
-//pop(list)
-//printList(list) println "-"
 
-//println "splitting a,b,c:" println split("a,b,c", ",")
-//println "splitting a,b,:" println split("a,b,", ",")
-//println "splitting a:" println split("a", ",")
-//println "splitting a, b, c:" println split("a, b, c", ",")
+// 1. get predefined stacks
+stacks:DList[10]
+i = 1 while i < 10 do i = i + 1 {
+  stacks[i] = new DList
+}
 
-// This prints each line
-// x = next_line() while x != null do x = next_line() {
-//    println x
-// }
+x = next_line() while length(x) > 0 do x = next_line() {
+ if x[1] == '1' {
+   break
+ }
+ // process left to right
+ j=1 i = 1 while i < length(x) do i = i + 4 {
+   if x[i] != ' ' {
+     append(stacks[j], makeDValue(x[i]))
+   }
+   j = j + 1
+ }
+}
+
+i = 1 while i < 10 do i = i + 1 {
+  printList(stacks[i])
+}
+
+// skip blank
+next_line()
+
+atoi: extern proc(s:string):int
+
+process_command: proc(count: int, from:int, to:int) {
+  temp = new DList
+  i = 0 while i < count do i = i + 1 {
+    val = pop(stacks[from])
+    push(temp, val)
+  }
+  print "temp list to move: " printList(temp)
+  i = 0 while i < count do i = i + 1 {
+    val = pop(temp)
+    push(stacks[to], val)
+  }
+  print "after moved: " printList(stacks[to])
+}
+
+// 2. process each command
+x = next_line() while x != null do x = next_line() {
+  command = split(x, " ")
+  count = atoi(command[1])
+  from = atoi(command[3])
+  to = atoi(command[5])
+  process_command(count, from, to)
+  println "now:"
+  i = 1 while i < 10 do i = i + 1 {
+    printList(stacks[i])
+  }
+}
+
+println "AFTER:"
+i = 1 while i < 10 do i = i + 1 {
+  printList(stacks[i])
+}
+
+i = 1 while i < 10 do i = i + 1 {
+  h = head(stacks[i])
+  if h != null {
+    print(h.value)
+  }
+}
+
