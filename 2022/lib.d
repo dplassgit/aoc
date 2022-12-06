@@ -24,8 +24,7 @@ next_line: proc(): String {
 }
 
 countSplitParts: proc(s:string, div:string): int {
-  j = 0
-  i = 0 while i < length(s) do i = i + 1 {
+  j = 0 i = 0 while i < length(s) do i = i + 1 {
     if s[i] == div {
       j = j + 1
     }
@@ -35,9 +34,8 @@ countSplitParts: proc(s:string, div:string): int {
 
 split: proc(s:string, div:string): string[] {
   parts:string[countSplitParts(s, div) + 1]
-  j = 0
   sofar = ''
-  i = 0 while i < length(s) do i = i + 1 {
+  j = 0 i = 0 while i < length(s) do i = i + 1 {
     ch = s[i]
     if ch == div {
       // found another one
@@ -49,7 +47,6 @@ split: proc(s:string, div:string): string[] {
     }
   }
   parts[j] = sofar
-  j = j + 1
   return parts
 }
 
@@ -78,6 +75,7 @@ append: proc(list: DList, value: DValue): DList {
     list.head = newtail
     return list
   }
+
   tail = list.head while tail.next != null do tail = tail.next {
   }
   // tail is really the tail
@@ -107,7 +105,7 @@ printList: proc(list: DList) {
   }
 }
 
-makeDValue: proc(v:string):DValue {
+makeDValue: proc(v:string): DValue {
   dval = new DValue
   dval.value = v
   return dval
@@ -129,6 +127,6 @@ makeDValue: proc(v:string):DValue {
 //println "splitting a, b, c:" println split("a, b, c", ",")
 
 // This prints each line
-// x = next_line() while x != null do x = next_line() {
+// line = next_line() while line != null do line = next_line() {
 //    println x
 // }
