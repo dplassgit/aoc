@@ -1,7 +1,7 @@
 atoi: extern proc(s:string):int
 
 // test this with other inputs, e.g.,
-// global_data = 'foo,bar'
+ global_data = 'foo\nbar\n'
 // global_data=input
 
 loc=0
@@ -13,7 +13,7 @@ next_line: proc(): String {
   while loc < len {
     ch = global_data[loc]
     loc = loc + 1
-    if ch != '\n' {
+    if asc(ch) != asc('\n') {
       line = line + ch
     } else {
       return line
@@ -37,7 +37,7 @@ split: proc(s:string, div:string): string[] {
   sofar = ''
   j = 0 i = 0 while i < length(s) do i = i + 1 {
     ch = s[i]
-    if ch == div {
+    if asc(ch) == asc(div) {
       // found another one
       parts[j] = sofar
       j = j + 1
@@ -101,8 +101,12 @@ head: proc(list: DList): DValue {
 
 printList: proc(list: DList) {
   tail = list.head while tail != null do tail = tail.next {
-    println tail.value.value
+    print tail.value.value
+    if tail.next != null {
+      print ", "
+    }
   }
+  println ""
 }
 
 makeDValue: proc(v:string): DValue {
@@ -127,6 +131,6 @@ makeDValue: proc(v:string): DValue {
 //println "splitting a, b, c:" println split("a, b, c", ",")
 
 // This prints each line
-// line = next_line() while line != null do line = next_line() {
-//    println x
-// }
+//line = next_line() while line != null do line = next_line() {
+  //println line
+//}
