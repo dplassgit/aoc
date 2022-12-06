@@ -163,10 +163,6 @@ x = next_line() while x != null do x = next_line() {
   from = atoi(command[3])
   to = atoi(command[5])
   process_command(count, from, to)
-  println "now:"
-  i = 1 while i < 10 do i = i + 1 {
-    printList(stacks[i])
-  }
 }
 
 println "AFTER:"
