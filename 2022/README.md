@@ -2,10 +2,14 @@
 
 https://adventofcode.com/2022
 
-## D
-
 I'm trying to use my own programming language, D, available at https://github.com/dplassgit/d2lang
 
+
+## Running from the deployjar
+
+```shell
+java -jar D2Compiler_deploy.jar day2.d -o day2.exe
+```
 
 ## Compiling
 
