@@ -99,6 +99,12 @@ head: proc(list: DList): DValue {
   return list.head.value
 }
 
+string2DValue: proc(v:string): DValue {
+  dval = new DValue
+  dval.value = v
+  return dval
+}
+
 printList: proc(list: DList) {
   tail = list.head while tail != null do tail = tail.next {
     print tail.value.value
@@ -109,18 +115,12 @@ printList: proc(list: DList) {
   println ""
 }
 
-makeDValue: proc(v:string): DValue {
-  dval = new DValue
-  dval.value = v
-  return dval
-}
-
 //list = new DList
-//append(list, makeDValue("hi"))
+//append(list, string2DValue("hi"))
 //printList(list) println "-"
-//push(list, makeDValue("first"))
+//push(list, string2DValue("first"))
 //printList(list) println "-"
-//append(list, makeDValue("bye"))
+//append(list, string2DValue("bye"))
 //printList(list) println "-"
 //pop(list)
 //printList(list) println "-"
