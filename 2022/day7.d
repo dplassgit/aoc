@@ -52,120 +52,8 @@ split: proc(s:string, div:string): string[] {
   return parts
 }
 
-
-////////////////////////////////////////////////////
-// LIST
-////////////////////////////////////////////////////
-
-DValue:record { // your data here
-  value:string
-}
-DEntry:record { value: DValue next:DEntry}
-DList:record { head:DEntry }
-
-printList: proc(list: DList) {
-  tail = list.head while tail != null do tail = tail.next {
-    print tail.value.value
-    if tail.next != null {
-      print ", "
-    }
-  }
-  println ""
-}
-
-push: proc(list: DList, value: DValue): DList {
-  e = new DEntry
-  e.value = value
-  e.next = list.head
-  list.head = e
-  return list
-}
-
-append: proc(list: DList, value: DValue): DList {
-  // 1. Find tail
-  // 2. Add new tail
-  newtail = new DEntry
-  newtail.value = value
-  if list.head == null {
-    // no tail
-    list.head = newtail
-    return list
-  }
-
-  tail = list.head while tail.next != null do tail = tail.next {
-  }
-  // tail is really the tail
-  tail.next = newtail
-  return list
-}
-
-pop: proc(list: DList): DValue {
-  if list.head == null {
-    exit "head of list is null"
-  }
-  value = list.head.value
-  list.head = list.head.next
-  return value
-}
-
-head: proc(list: DList): DValue {
-  if list.head == null {
-    exit "head of list is null"
-  }
-  return list.head.value
-}
-
-removeFromList: proc(list: DList, target: string):bool {
-  h = list.head
-  if h == null {
-    return false
-  }
-  if h.value.value == target {
-    // need to change head
-    list.head = h.next
-    return true
-  } else {
-
-    while h != null do h = h.next {
-      next = h.next
-      if next == null {
-        return false
-      }
-      if next.value.value == target {
-        // found it.
-        h.next = next.next
-        return true
-      }
-    }
-  }
-  return false
-}
-
-string2DValue: proc(v:string): DValue {
-  dval = new DValue
-  dval.value = v
-  return dval
-}
-
-listContains: proc(list:DList, value: string): bool {
-  if list == null {
-    return false
-  }
-  return listEntryContains(list.head, value) 
-}
-
-listEntryContains: proc(head:DEntry, value: string): bool {
-  if head == null {
-    return false
-  }
-  if head.value.value == value {
-    return true
-  }
-  return listEntryContains(head.next, value)
-}
-
-
-// day 7
+////////////////////////////////////////////////
+// Day 7
 
 Dir: record {
   name: string
@@ -210,11 +98,12 @@ processCd: proc(line:string) {
 
 
 //Format:
-//dir a
-//14848514 b.txt
-//8504156 c.dat
-//dir d
-
+// $ ls
+// dir a
+// 14848514 b.txt
+// 8504156 c.dat
+// dir d
+// $ cd ..
 
 global_line:string
 processLs:proc() {
