@@ -172,7 +172,7 @@ Dir: record {
   total_direct_child_size: int // sum of files
   total_tree_size: int // includes self
   num_children: int
-	children: Dir[15] // Will this even work?
+	children: Dir[15]
 	parent: Dir
 }
 
@@ -218,10 +218,8 @@ processCd: proc(line:string) {
 
 global_line:string
 processLs:proc() {
-  //println "start of processls line is " + global_line
   // the current line is “ls”
   global_line = next_line() while global_line[0] != '$' do global_line = next_line() {
-  //println "at beginning of ls while line is " + global_line
     parts = split(global_line, ' ')
     if asc(parts[0]) == asc('d') {
       println "Adding child directory " + parts[1]  + " to directory " + cwd.name
@@ -239,21 +237,17 @@ processLs:proc() {
        print "Adding " print fileSize println " bytes to directory " + cwd.name
        cwd.total_direct_child_size = cwd.total_direct_child_size + fileSize
     }
-  //println "at end of ls while line is " + global_line
   }
-  //println "end of processls line is " + global_line
 }
 
 next_line() // skip "cd /"
 global_line = next_line() while global_line != null {
-  //println "at beginning of while line is " + global_line
   if global_line == '$ ls' {
     processLs()
   } else {
     processCd(global_line)
     global_line = next_line()
   }
-  //println "at end of while line is " + global_line
 }
 
 // now, calculate size of all directories
@@ -272,7 +266,6 @@ calcSize(root)
 
 answer = 0
 calcSmallSize: proc(d:Dir) {
-  println "looking at dir " + d.name
   if d.total_tree_size < 100000 {
     answer = answer + d.total_tree_size
   }
@@ -281,5 +274,21 @@ calcSmallSize: proc(d:Dir) {
   }
 }
 calcSmallSize(root)
-print "Answer: " println answer
+print "Part 1: " println answer
 
+unused = 70000000 - root.total_tree_size
+needed = 30000000 - unused
+
+answer = 1000000000
+// find the smallest directory bigger than  needed
+smallest: proc(d:Dir) {
+  it = d.total_tree_size
+  if it > needed and it < answer {
+    answer = it
+  }
+  i = 0 while i < d.num_children do i = i + 1 {
+    smallest(d.children[i])
+  }
+}
+smallest(root)
+print "Part 2: " println answer
