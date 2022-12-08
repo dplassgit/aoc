@@ -26,34 +26,7 @@ next_line: proc(): String {
   return null
 }
 
-countSplitParts: proc(s:string, div:string): int {
-  j = 0 i = 0 while i < length(s) do i = i + 1 {
-    if s[i] == div {
-      j = j + 1
-    }
-  }
-  return j
-}
-
-split: proc(s:string, div:string): string[] {
-  // TODO: use a DList for this
-  parts:string[countSplitParts(s, div) + 1]
-  sofar = ''
-  j = 0 i = 0 while i < length(s) do i = i + 1 {
-    ch = s[i]
-    // Uses asc for integer vs string comparison
-    if asc(ch) == asc(div) {
-      // found another one
-      parts[j] = sofar
-      j = j + 1
-      sofar = ''
-    } else {
-      sofar = sofar + ch
-    }
-  }
-  parts[j] = sofar
-  return parts
-}
+// Day 8
 
 height=0
 width=0
@@ -63,7 +36,6 @@ line = next_line() while line != null do line = next_line() {
 }
 print width print "x" println height
 
-reset_next_line()
 data:int[height * width]
 
 parse_row: proc(row:int, line:string) {
@@ -73,6 +45,7 @@ parse_row: proc(row:int, line:string) {
 }
 
 height=0
+reset_next_line()
 line = next_line() while line != null do line = next_line() {
   parse_row(height, line)
   println line
@@ -120,7 +93,6 @@ count_seen: proc():int {
 }
 
 process_swath: proc(sx: int, sy:int, ex: int, ey: int, dx:int, dy:int) {
-  // this is wrong. it needs to start before
   tallest = xy(sx, sy)
 //  print "initial tallest " println tallest
   if sx == ex {
