@@ -134,25 +134,23 @@ x = 1 while x < width - 1 do x = x + 1 {
 
 print 'Part1: ' println part1
 
-// OH I THINK I TSEE IT NOW
 // 3 cases: 1 off the grid: stop. 2. not off the grid, i'm bigger: keep going. 3. not off the grid, they're bigger: stop.
 good: proc(x:int, y:int, me:int): int {
   if x < 0 or y < 0 { return 0 }
   if x >= width or y >= height { return 0 }
-  if me > xy(x, y) { return 1} else {return -1}
+  if me > xy(x, y) { return 1 } else { return -1 }
 }
 
 calcScenicHeight: proc(x: int, y:int): int {
   me = xy(x, y)
-  // go up down left right, get length, multiple
   left = 0
   right = 0
   up = 0
   down = 0
-  tx = x - 1 while true { g = good (tx, y, me) if g == 0 { break} else { left = left + 1 tx = tx - 1 if g == -1 { break }}}
-  tx = x + 1 while true { g = good (tx, y, me) if g == 0 { break} else { right = right + 1 tx = tx + 1 if g == -1 { break }}}
-  ty = y - 1 while true { g = good (x, ty, me) if g == 0 { break} else { up = up + 1 ty = ty - 1 if g == -1 { break }}}
-  ty = y + 1 while true { g = good (x, ty, me) if g == 0 { break} else { down = down + 1 ty = ty + 1 if g == -1 { break }}}
+  tx = x - 1 while true { g = good(tx, y, me) if g == 0 {break} else {left = left + 1 tx = tx - 1 if g == -1 {break} } }
+  tx = x + 1 while true { g = good(tx, y, me) if g == 0 {break} else {right = right + 1 tx = tx + 1 if g == -1 {break} } }
+  ty = y - 1 while true { g = good(x, ty, me) if g == 0 {break} else {up = up + 1 ty = ty - 1 if g == -1 {break} } }
+  ty = y + 1 while true { g = good(x, ty, me) if g == 0 {break} else {down = down + 1 ty = ty + 1 if g == -1 {break} } }
 
   return left*right*up*down
 }
@@ -164,7 +162,7 @@ y = 1 while y < height - 1 do y = y + 1 {
     // scenic height
     sh = calcScenicHeight(x, y)
     if sh > part2 {
-  print sh print " is best at " print x print "," println y
+      print sh print " is best at " print x print "," println y
       part2 = sh
     }
   }
