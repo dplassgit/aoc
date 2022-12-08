@@ -5,6 +5,11 @@ global_data = 'foo\nbar\n'
 // global_data=input
 
 next_line_loc=0
+
+reset_input: proc() {
+  next_line_loc = 0
+}
+
 // Get the next line. Returns null at EOF.
 // NOTE: LAST LINE MUST END WITH \n
 next_line: proc(): String {
