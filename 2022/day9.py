@@ -1,3 +1,5 @@
+# requires python3
+f = open('day9.txt', 'r')
 input=[
 'R 4',
 'U 4',
@@ -7,6 +9,7 @@ input=[
 'D 1',
 'L 5',
 'R 2']
+input = f.readlines()
 
 
 # for visualization only
@@ -89,5 +92,5 @@ for line in input:
             maybeMoveTail()
     visualize()
 
-print("Part1: %d" % len(tailspots))
 print(tailspots)
+print("Part1: %d" % len(tailspots))
