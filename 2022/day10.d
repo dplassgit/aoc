@@ -62,42 +62,40 @@ split: proc(s:string, div:string): string[] {
 }
 
 
-X=1
-clock=0 // this changed from 1 to 0 when I rewrote it to use "cycle". wth
+X = 1
+clock = 0
 
 // find 20, 60, 100 , 140, 220
-target=20
+target = 20
+
 part1 = 0
 
 cycle:proc(dx:int) {
-  xatstart=X
-  clockatstart=clock
-  X = X + dx
-  clock = clock + 1
-  if clockatstart == target {
-    part1 = part1 + target * xatstart
-    //print "During target " print target print "X was " println xatstart
-    target = target + 40
+  mod40 = clock % 40
+  if mod40 == 0 {
+    println ""
   }
 
-  // I totally don't understand this
-  mod40 = (clock)% 40
-  if X == mod40 or (X-1)==mod40 or (X+1)==mod40 {
+  // I don't understand this, but thanks to the magic of Reddit, it works.
+  if X == mod40 or (X-1) == mod40 or (X+1) == mod40 {
     print "#"
   } else {
     print "."
   }
-  if mod40 == 0 {
-    println ""
+
+  clock = clock + 1
+  if clock == target {
+    part1 = part1 + target * X
+    target = target + 40
   }
+
+  X = X + dx
 }
 
 process:proc(line:string) {
   parts = split_space(line)
-  if parts[0] == 'noop' {
-    cycle(0)
-  } elif parts[0] == 'addx' {
-    cycle(0)
+  cycle(0)   // noop, or maybe addx
+  if parts[0] == 'addx' {
     cycle(atoi(parts[1]))
   }
   //print "After " + line + ", clock=" print clock print ", X= " println X
@@ -107,4 +105,4 @@ instr = next_line() while instr != null do instr = next_line() {
   process(instr)
 }
 
-print "Part1: " println part1
+print "\n\nPart1: " println part1
