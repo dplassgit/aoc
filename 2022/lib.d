@@ -37,6 +37,10 @@ countSplitParts: proc(s:string, div:string): int {
   return j
 }
 
+split_space: proc(s:string): string[] {
+  return split(s, ' ')
+}
+
 split: proc(s:string, div:string): string[] {
   // TODO: use a DList for this
   parts:string[countSplitParts(s, div) + 1]
@@ -57,6 +61,8 @@ split: proc(s:string, div:string): string[] {
   return parts
 }
 
+abs: proc(i:int):int { if i < 0 { return -i } return i }
+
 
 ////////////////////////////////////////////////////
 // SET
@@ -66,11 +72,14 @@ DSet: record {
 }
 
 PRIMES = [2,3,5,7,11]
+NPRIMES = length(PRIMES)
 hashCode: proc(value: string): int {
   hash = 17 + length(value)
   i = 0 while i < length(value) do i = i + 1 {
     ch = value[i]
-    hash = hash + asc(ch) * PRIMES[i%5]
+    // NOTE: if value is an array of ints,
+    // use abs here
+    hash = hash + asc(ch) * PRIMES[i%NPRIMES]
   }
   return hash
 }
@@ -232,6 +241,8 @@ removeFromList: proc(list: DList, target: string):bool {
   return false
 }
 
+// NOTE: if v is mutable, consider making a copy before
+// making the DValue
 string2DValue: proc(v:string): DValue {
   dval = new DValue
   dval.value = v
