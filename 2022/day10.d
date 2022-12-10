@@ -63,27 +63,37 @@ split: proc(s:string, div:string): string[] {
 
 
 X=1
-clock=1
+clock=0 // this changed from 0 to 1 when I rewrote it to use "cycle". wth
 
 // find 20, 60, 100 , 140, 220
 target=20
 part1 = 0
-instr = next_line() while instr != null do instr = next_line() {
+
+cycle:proc(dx:int) {
   xatstart=X
   clockatstart=clock
-  parts = split_space(instr)
-  if parts[0] == 'noop' {
-    clock = clock + 1
-  } elif parts[0] == 'addx' {
-    X = X + atoi(parts[1])
-    clock = clock + 2
-  }
-//  print "After " + instr + ", clock=" print clock print ", X= " println X
-  if clockatstart <= target and clock > target {
+  X = X + dx
+  clock = clock + 1
+  if clockatstart == target {
     part1 = part1 + target * xatstart
     print "During target " print target print "X was " println xatstart
     target = target + 40
   }
+}
+
+process:proc(line:string) {
+  parts = split_space(line)
+  if parts[0] == 'noop' {
+    cycle(0)
+  } elif parts[0] == 'addx' {
+    cycle(0)
+    cycle(atoi(parts[1]))
+  }
+//  print "After " + line + ", clock=" print clock print ", X= " println X
+}
+
+instr = next_line() while instr != null do instr = next_line() {
+  process(instr)
 }
 
 print "Part1: " println part1
