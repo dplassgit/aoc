@@ -63,7 +63,7 @@ split: proc(s:string, div:string): string[] {
 
 
 X=1
-clock=0 // this changed from 0 to 1 when I rewrote it to use "cycle". wth
+clock=0 // this changed from 1 to 0 when I rewrote it to use "cycle". wth
 
 // find 20, 60, 100 , 140, 220
 target=20
@@ -76,8 +76,19 @@ cycle:proc(dx:int) {
   clock = clock + 1
   if clockatstart == target {
     part1 = part1 + target * xatstart
-    print "During target " print target print "X was " println xatstart
+    //print "During target " print target print "X was " println xatstart
     target = target + 40
+  }
+
+  // I totally don't understand this
+  mod40 = (clock)% 40
+  if X == mod40 or (X-1)==mod40 or (X+1)==mod40 {
+    print "#"
+  } else {
+    print "."
+  }
+  if mod40 == 0 {
+    println ""
   }
 }
 
@@ -89,7 +100,7 @@ process:proc(line:string) {
     cycle(0)
     cycle(atoi(parts[1]))
   }
-//  print "After " + line + ", clock=" print clock print ", X= " println X
+  //print "After " + line + ", clock=" print clock print ", X= " println X
 }
 
 instr = next_line() while instr != null do instr = next_line() {
