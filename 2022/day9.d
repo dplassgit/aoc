@@ -250,7 +250,6 @@ visualize:proc {
 
 i = 0
 line = next_line() while line != null do line = next_line() {
-  println line
   parts = split(line, ' ')
   dir = parts[0]
   count = atoi(parts[1])
@@ -285,7 +284,7 @@ line = next_line() while line != null do line = next_line() {
   // visualize()
 }
 
-printSet(tailspots)
+// printSet(tailspots)
 Print "Part1: " println setSize(tailspots)
 
 
