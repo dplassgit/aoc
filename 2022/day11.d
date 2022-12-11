@@ -209,6 +209,9 @@ Monkey:record {
   toFalse: int // monkey number to throw to if true
 }
 
+monkeys:Monkey[8]
+
+
 //Monkey 0:
 //  Starting items: 79, 98
 //  Operation: new = old * 19
@@ -226,7 +229,7 @@ processMonkey: proc(i:int): Monkey {
   items2 = toend(items, 18)
   parts = split(items2, ",")
   j = 0 while j < length(parts) do j = j + 1 {
-    push(m.items, string2DValue(parts[j]))
+    append(m.items, string2DValue(parts[j]))
   }
 
   operation = next_line()
@@ -257,6 +260,9 @@ processMonkey: proc(i:int): Monkey {
 
 
 printMonkey: proc(m: Monkey) {
+  if m == null {
+    return
+  }
   print "Monkey " println m.num
   print "  Items: " printList(m.items)
   print "  Operation: new = old " print chr(m.operation) print " " println m.factor
@@ -265,7 +271,50 @@ printMonkey: proc(m: Monkey) {
   print "    If false: throw to monkey " println m.toFalse
 }
 
-monkeys:Monkey[8]
+
+throwStuff: proc(m: Monkey) {
+  if m == null {
+    return
+  }
+  items = m.items
+  if items == null {
+    return
+  }
+
+  item = items.head while item != null do item = item.next {
+    // process item
+    value = item.value.value
+    print "Processing item " print value print " from monkey " println m.num
+    vi = atoi(value)
+    // 1. inspect: apply the operation
+    if m.operation == ADD {
+      vi = vi + m.factor
+    } elif m.operation == MULT {
+      vi = vi * m.factor
+    } else {
+      vi = vi * vi  // is this right?
+    }
+    print "new worry level " println vi
+
+    // 2. divide by 3
+    vi = vi / 3
+    print "bored worry level " println vi
+    // 3. is value divisible by "test"
+    if (vi % m.test) == 0 {
+      // 4. if true, add to monkey true's list
+      print "bored worry level divisible by " println m.test
+      m2 = monkeys[m.toTrue]
+      // app
+      //append(m2.items, awcrap)
+    } else {
+    // 5. if false, add to monkey false's list
+      print "bored worry level not divisible by " println m.test
+      m2 = monkeys[m.toFalse]
+      //append(m2.items, awcrap)
+    }
+  }
+}
+
 
 i = 0
 while true do i = i + 1 {
@@ -275,6 +324,19 @@ while true do i = i + 1 {
   printMonkey(monkeys[i])
 }
 
+// 20 rounds
+i = 0 while i < 20 do i = i + 1 {
+  j = 0 while j < 8 do j = j + 1 {
+    // for each monkey
+    throwStuff(monkeys[j])
+  }
+  print "After round " println i
+  j = 0 while j < 8 do j = j + 1 {
+    // for each monkey
+    printMonkey(monkeys[j])
+  }
+  break
+}
 print "Part 1: " println part1
 
 //s = new DSet
