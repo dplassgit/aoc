@@ -69,7 +69,7 @@ abs: proc(i:int):int { if i < 0 { return -i } return i }
 ////////////////////////////////////////////////////
 
 DValue:record { // your data here
-  value:string
+  value: int
 }
 DEntry:record { value: DValue next:DEntry}
 DList:record { head:DEntry }
@@ -129,7 +129,7 @@ head: proc(list: DList): DValue {
   return list.head.value
 }
 
-removeFromList: proc(list: DList, target: string):bool {
+removeFromList: proc(list: DList, target: int):bool {
   h = list.head
   if h == null {
     return false
@@ -157,20 +157,20 @@ removeFromList: proc(list: DList, target: string):bool {
 
 // NOTE: if v is mutable, consider making a copy before
 // making the DValue
-string2DValue: proc(v:string): DValue {
+int2DValue: proc(v:int): DValue {
   dval = new DValue
   dval.value = v
   return dval
 }
 
-listContains: proc(list:DList, value: string): bool {
+listContains: proc(list:DList, value: int): bool {
   if list == null {
     return false
   }
   return listEntryContains(list.head, value) 
 }
 
-listEntryContains: proc(head:DEntry, value: string): bool {
+listEntryContains: proc(head:DEntry, value: int): bool {
   if head == null {
     return false
   }
@@ -207,6 +207,7 @@ Monkey:record {
   test: int
   toTrue: int // monkey number to throw to if true
   toFalse: int // monkey number to throw to if true
+  rounds: int
 }
 
 monkeys:Monkey[8]
@@ -229,7 +230,7 @@ processMonkey: proc(i:int): Monkey {
   items2 = toend(items, 18)
   parts = split(items2, ",")
   j = 0 while j < length(parts) do j = j + 1 {
-    append(m.items, string2DValue(parts[j]))
+    append(m.items, int2DValue(atoi(parts[j])))
   }
 
   operation = next_line()
@@ -269,6 +270,16 @@ printMonkey: proc(m: Monkey) {
   print "  Test: divible by " println m.test
   print "    If true: throw to monkey " println m.toTrue
   print "    If false: throw to monkey " println m.toFalse
+  print "  Rounds: " println m.rounds
+}
+
+shortPrintMonkey: proc(m: Monkey) {
+  if m == null {
+    return
+  }
+  print "Monkey " print m.num
+  print "Rounds: " print m.rounds 
+  print "  Items: " printList(m.items)
 }
 
 
@@ -281,11 +292,13 @@ throwStuff: proc(m: Monkey) {
     return
   }
 
-  item = items.head while item != null do item = item.next {
+  while items.head != null {
     // process item
-    value = item.value.value
-    print "Processing item " print value print " from monkey " println m.num
-    vi = atoi(value)
+    headItem = pop(items)
+    m.rounds = m.rounds + 1
+
+    vi = headItem.value
+    //print "Processing item " print vi print " from monkey " println m.num
     // 1. inspect: apply the operation
     if m.operation == ADD {
       vi = vi + m.factor
@@ -294,23 +307,22 @@ throwStuff: proc(m: Monkey) {
     } else {
       vi = vi * vi  // is this right?
     }
-    print "new worry level " println vi
+    //print "new worry level " println vi
 
     // 2. divide by 3
     vi = vi / 3
-    print "bored worry level " println vi
+    //print "bored worry level " println vi
     // 3. is value divisible by "test"
     if (vi % m.test) == 0 {
       // 4. if true, add to monkey true's list
-      print "bored worry level divisible by " println m.test
+      //print "bored worry level divisible by " println m.test
       m2 = monkeys[m.toTrue]
-      // app
-      //append(m2.items, awcrap)
+      append(m2.items, int2DValue(vi))
     } else {
     // 5. if false, add to monkey false's list
-      print "bored worry level not divisible by " println m.test
+      //print "bored worry level not divisible by " println m.test
       m2 = monkeys[m.toFalse]
-      //append(m2.items, awcrap)
+      append(m2.items, int2DValue(vi))
     }
   }
 }
@@ -333,11 +345,32 @@ i = 0 while i < 20 do i = i + 1 {
   print "After round " println i
   j = 0 while j < 8 do j = j + 1 {
     // for each monkey
-    printMonkey(monkeys[j])
+    shortPrintMonkey(monkeys[j])
   }
-  break
 }
-print "Part 1: " println part1
+
+// ugh finding top 2 best is a pain in the butt
+top=[-1, -1]
+
+j = 0 while j < 8 do j = j + 1 {
+  // for each monkey
+  m=monkeys[j]
+  if m == null {break}
+  printMonkey(monkeys[j])
+  if m.rounds > top[0] {
+    top[0] = m.rounds
+  }
+}
+j = 0 while j < 8 do j = j + 1 {
+  // for each monkey
+  m=monkeys[j]
+  if m == null {break}
+  if m.rounds > top[1] and m.rounds < top[0]{
+    top[1] = m.rounds
+  }
+}
+
+print "Part 1: " println top[0] * top[1]
 
 //s = new DSet
 //print "Should be false: " println setContains(s, 'hi')
