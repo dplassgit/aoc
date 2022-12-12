@@ -105,10 +105,10 @@ public class Day11 {
     private static final BigDecimal THREE = new BigDecimal(3);
 
     int num;
-    List<BigDecimal> items = new ArrayList<>();
+    List<Long> items = new ArrayList<>();
     Operation op;
-    BigDecimal factor;
-    BigDecimal test;
+    long factor;
+    long test;
     int toTrue; // monkey number to throw to if true
     int toFalse; // monkey number to throw to if true
     int rounds;
@@ -116,12 +116,8 @@ public class Day11 {
     void print() {
       System.out.printf("Monkey %d\n", num);
       System.out.printf("  Items: %s\n", items.toString());
-      if (factor != null) {
-        System.out.printf("  Operation: new = old %s %s\n", op, factor.toString());
-      } else {
-        System.out.printf("  Operation: new = old * old\n");
-      }
-      System.out.printf("  Test: divible by %s\n", test.toString());
+      System.out.printf("  Operation: new = old %s %d\n", op, factor);
+      System.out.printf("  Test: divible by %d\n", test);
       System.out.printf("    If true: throw to monkey %d\n", toTrue);
       System.out.printf("    If false: throw to monkey %d\n", toFalse);
       System.out.printf("  Rounds: %d\n", rounds);
@@ -149,7 +145,7 @@ public class Day11 {
       Iterable<String> parts = Splitter.on(",").split(items);
       for (String item : parts) {
         item = item.trim();
-        m.items.add(new BigDecimal(item));
+        m.items.add(Long.parseLong(item));
       }
       String operation = nextLine();
       String[] partarray = splitToArray(operation);
@@ -162,12 +158,12 @@ public class Day11 {
         } else {
           m.op = Operation.Mult;
         }
-        m.factor = new BigDecimal(partarray[5]);
+        m.factor = Long.parseLong(partarray[5]);
       }
 
       String test = nextLine();
       partarray = splitToArray(test);
-      m.test = new BigDecimal(partarray[3]);
+      m.test = Long.parseLong(partarray[3]);
 
       String toTrue = nextLine();
       partarray = splitToArray(toTrue);
@@ -191,32 +187,32 @@ public class Day11 {
 
       while (items.size() > 0) {
         // process item
-        BigDecimal headItem = items.remove(0);
+        long headItem = items.remove(0);
         rounds++;
 
-        BigDecimal vi = headItem;
+        long vi = headItem;
         // print "Processing item " print vi print " from monkey " println m.num
         // 1. inspect: apply the operation
         switch (op) {
           case Add:
-            vi = vi.add(factor);
+            vi = vi + factor;
             break;
           case Mult:
-            vi = vi.multiply(factor);
+            vi = vi * factor;
             break;
           case Square:
-            vi = vi.multiply(vi);
+            vi = vi * vi;
             break;
         }
-        vi = vi.remainder(allfact);
+        vi = vi % allfact;
         // print "new worry level " println vi
 
         // 2. divide by 3
         //        vi = vi.divideToIntegralValue(THREE);
         // print "bored worry level " println vi
         // 3. is value divisible by "test"
-        BigDecimal rem = vi.remainder(test);
-        if (rem.equals(BigDecimal.ZERO)) {
+        long rem = vi % test;
+        if (rem == 0) {
           // 4. if true, add to monkey true's list
           // print "bored worry level divisible by " println m.test
           Monkey m2 = monkeys[toTrue];
@@ -231,11 +227,11 @@ public class Day11 {
     }
   }
 
-  static BigDecimal allfact;
+  static long allfact = 1;
   static Monkey[] monkeys = new Monkey[8];
   static int nextLine = 0;
-  //  static String lines[] = SMALL.split("\n");
-  static String lines[] = BIG.split("\n");
+  static String lines[] = SMALL.split("\n");
+  //  static String lines[] = BIG.split("\n");
 
   private static String nextLine() {
     if (nextLine >= lines.length) {
@@ -245,7 +241,6 @@ public class Day11 {
   }
 
   public static void main(String[] args) {
-    allfact = BigDecimal.ONE;
     // parse monkeys
     for (int i = 0; ; i++) {
       Monkey m = Monkey.parseMonkey(i);
@@ -254,7 +249,7 @@ public class Day11 {
       }
       monkeys[i] = m;
       m.print();
-      allfact = allfact.multiply(m.test);
+      allfact = allfact * m.test;
     }
 
     doRounds(10000);
