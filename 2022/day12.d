@@ -70,14 +70,13 @@ abs: proc(i:int):int { if i < 0 { return -i } return i }
 
 DValue:record { // your data here
   value: int  // this is the location in the map: x+y*width
-  dist: int  // distance from start to here.
 }
 DEntry:record { value: DValue next:DEntry}
 DList:record { head:DEntry }
 
 printList: proc(list: DList) {
   tail = list.head while tail != null do tail = tail.next {
-    print tail.value.value print "(" print tail.value.dist print ")"
+    print tail.value.value 
     if tail.next != null {
       print ", "
     }
@@ -247,7 +246,6 @@ processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
         if new_cost < old_cost {
           qvalue = new DValue
           qvalue.value = v
-          qvalue.dist = uvalue.dist + 1
           append(q, qvalue)
           dist[v] = new_cost
         }
@@ -275,7 +273,6 @@ bfs:proc {
   q=new DList
   qvalue = new DValue
   qvalue.value = startx + starty*width
-  qvalue.dist = 0
   append(q, qvalue)
 
   while q.head != null {
