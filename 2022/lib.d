@@ -1,8 +1,7 @@
 atoi: extern proc(s:string):int
 
-// test this with other inputs, e.g.,
-global_data = 'foo\nbar\n'
-// global_data=input
+// Read everything all at once
+global_data=input
 
 next_line_loc=0
 
@@ -267,45 +266,13 @@ listEntryContains: proc(head:DEntry, value: string): bool {
 }
 
 
-//s = new DSet
-//print "Should be false: " println setContains(s, 'hi')
-//print "Should be false: " println addToSet(s, 'hi')
-//printSet(s)
-//
-//i = 0 while i < 26 do i = i + 1 {
-//  addToSet(s, chr(i+asc('a')))
-//  addToSet(s, chr(i+asc('A')))
-//  addToSet(s, chr(i+asc('A'))+'Bcde')
-//  addToSet(s, "A" + chr(i+asc('a')) + 'A')
-//  addToSet(s, "a" + chr(i+asc('A')) + 'a')
-//  addToSet(s, "AB" + chr(i+asc('a')) + 'BA')
-//  addToSet(s, "ab" + chr(i+asc('A')) + 'ba')
-//  addToSet(s, "BC" + chr(i+asc('a')) + 'CBA')
-//  addToSet(s, "bc" + chr(i+asc('A')) + 'cba')
-//  addToSet(s, "CDE" + chr(i+asc('a')))
-//  addToSet(s, "cdE" + chr(i+asc('A')))
-//  addToSet(s, "DEFG" + chr(i+asc('a')))
-//  addToSet(s, "cdefg" + chr(i+asc('A')))
-//}
-//printSet(s)
-//addToSet(s, 'A')
-//addToSet(s, 'ab')
-//addToSet(s, 'ab')
-//addToSet(s, 'zy')
-//addToSet(s, 'zy')
-//addToSet(s, 'abcdefghijklmnop')
-//addToSet(s, 'abcdefghijklmnop')
-//addToSet(s, 'qrstuvwxyzABCDFG')
-//addToSet(s, 'qrstuvwxyzABCDFG')
-//
-//print "Should be true: " println setContains(s, 'hi')
-//print "Should be true: " println addToSet(s, 'hi')
-//printList(allSetValues(s))
-//
-//printSet(s)
-//
-//removeFromSet(s, 'ab')
-//printSet(s)
-//removeFromSet(s, 'r')
-//printSet(s)
-//
+////////////////////////////////////////////////////
+// DAY XX CODE HERE
+////////////////////////////////////////////////////
+
+answer = 0
+line = next_line() while line != null do line = next_line() {
+  println line
+}
+
+print "Part 1: " println answer
