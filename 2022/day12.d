@@ -232,31 +232,19 @@ processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
   u = uvalue.value
   y = u/width
   x = u % width
-  //print "u was " println u
-  //print "x, y: " print x print "," println y
   vx = x + dx
   vy = y + dy
-  //print "vx, vy: " print vx print "," println vy
   if vx >= 0 and vx < width and vy >= 0 and vy < height {
     // we're on the board
     v = vx + vy * width
-   // print "v: " println v
     oldheight = map[u]
     newheight = map[v]
-    //if not (newheight >= oldheight - 1) {
-      //return
-    //}
-    if map[v] == map[u] or abs(map[v] - map[u]) == 1 {
-      //println "within 1"
+    if map[v] == map[u] or map[v] - map[u] == 1 or map[v] < map[u] {
       if not seen[v] {
-    //    println "Not seen before"
         // not processed before
         old_cost = dist[v]
-        //print "Old cost " println old_cost
         new_cost = dist[u] + 1
-        //print "new cost " println new_cost
         if new_cost < old_cost {
-          //print "Better! Enquing " print vx print "," println vy
           qvalue = new DValue
           qvalue.value = v
           qvalue.dist = uvalue.dist + 1
@@ -296,7 +284,6 @@ bfs:proc {
       continue
     }
     if v.value == endloc {
-      print "Part 1: " println v.dist
       break
     }
     seen[v.value] = true
@@ -305,7 +292,7 @@ bfs:proc {
     processNeighbor2(q, v, 1, 0)
     processNeighbor2(q, v, 0, -1)
     processNeighbor2(q, v, 0, 1)
-    println "Queue is now " printList(q)
+//    println "Queue is now " printList(q)
  //   println "Dist is now" 
  //   printArr(dist)
   }
