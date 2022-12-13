@@ -73,7 +73,7 @@ pop: proc(list: DList): DValue {
 }
 
 
-// DAY 12 PART 2
+// DAY 12 PART 1
 
 width=0
 height=0
@@ -85,14 +85,13 @@ line=next_line() while line != null do line = next_line() {
 reset_input()
 map:int[width*height]
 dist:int[width*height]
-inq:bool[width*height]
 seen:bool[width*height]
 
-j=0
 startx=0
 starty=0
 endx=0
 endy=0
+j=0
 line=next_line() while line != null do line = next_line() {
   i = 0 while i < width do i = i + 1 {
     spot = asc(line[i])
@@ -129,8 +128,7 @@ printArr: proc(arr:int[]) {
 }
 //printArr(map)
 
-
-processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
+processNeighbor: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
   // go back from u to x, y
   u = uvalue.value
   y = u/width
@@ -166,7 +164,6 @@ bfs:proc {
     i = 0 while i < width do i = i + 1 {
       vloc = i + j*width
       if i == startx and j == starty {
-        dist[vloc] = 0
       } else {
         dist[vloc] = INFINITY
       }
@@ -188,10 +185,10 @@ bfs:proc {
     }
     seen[v.value] = true
 
-    processNeighbor2(q, v, -1, 0)
-    processNeighbor2(q, v, 1, 0)
-    processNeighbor2(q, v, 0, -1)
-    processNeighbor2(q, v, 0, 1)
+    processNeighbor(q, v, -1, 0)
+    processNeighbor(q, v, 1, 0)
+    processNeighbor(q, v, 0, -1)
+    processNeighbor(q, v, 0, 1)
 //    println "Queue is now " printList(q)
  //   println "Dist is now" 
  //   printArr(dist)
@@ -199,6 +196,6 @@ bfs:proc {
 }
 
 bfs()
-println "After"
-//printArr(dist)
+// println "After"
+// printArr(dist)
 print "Part 1: " print dist[endx + endy*width]
