@@ -70,13 +70,14 @@ abs: proc(i:int):int { if i < 0 { return -i } return i }
 
 DValue:record { // your data here
   value: int  // this is the location in the map: x+y*width
+  dist: int  // distance from start to here.
 }
 DEntry:record { value: DValue next:DEntry}
 DList:record { head:DEntry }
 
 printList: proc(list: DList) {
   tail = list.head while tail != null do tail = tail.next {
-    print tail.value.value
+    print tail.value.value print "(" print tail.value.dist print ")"
     if tail.next != null {
       print ", "
     }
@@ -215,9 +216,8 @@ printArr: proc(arr:int[]) {
       loc = i + j * width
       if arr[loc] == INFINITY { 
         print "inf "
-      }
-      else {
-        print arr[loc] print ' '
+      } else {
+        print arr[loc] print " "
       }
     }
     println ""
@@ -227,52 +227,9 @@ printArr(map)
 
 
 
-
-//          u ← vertex in Q with min dist[u]
-findMin: proc(q:DList): int {
-  best = INFINITY
-  bestloc = startx + starty*width
-  // this is soooo slow...
-  h = q.head while h != null do h = h.next {
-    loc = h.value.value
-    d = dist[loc]
-    if d < best {
-      best = d
-      bestloc = loc
-    }
-  }
-  return bestloc
-}
-
-
-processNeighbor: proc(u: int, dx: int, dy: int) {
+processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
   // go back from u to x, y
-  y = u/width
-  x = u % width
-  //print "u was " println u
-  //print "x, y: " print x print "," println y
-  vx = x + dx
-  vy = y + dy
-  //print "vx, vy: " print vx print "," println vy
-  v = vx + vy * width
-  if vx >= 0 and vx < width and vy >= 0 and vy < height {
-    //  alt ← dist[u] + Graph.Edges(u, v)
-    // it exists
-    if inq[v] {
-      // it's still in Q
-      if abs(map[u] - map[v]) < 2 {
-        // we can go there
-        alt = dist[u] + 1
-        if alt < dist[v] {
-          dist[v] = alt
-        }
-      }
-    }
-  }
-}
-
-processNeighbor2: proc(q:DList, u: int, dx: int, dy: int) {
-  // go back from u to x, y
+  u = uvalue.value
   y = u/width
   x = u % width
   //print "u was " println u
@@ -284,7 +241,12 @@ processNeighbor2: proc(q:DList, u: int, dx: int, dy: int) {
     // we're on the board
     v = vx + vy * width
    // print "v: " println v
-    if map[u] == map[v] or abs(map[v] -map[u]) == 1 {
+    oldheight = map[u]
+    newheight = map[v]
+    //if not (newheight >= oldheight - 1) {
+      //return
+    //}
+    if map[v] == map[u] or abs(map[v] - map[u]) == 1 {
       //println "within 1"
       if not seen[v] {
     //    println "Not seen before"
@@ -297,60 +259,18 @@ processNeighbor2: proc(q:DList, u: int, dx: int, dy: int) {
           //print "Better! Enquing " print vx print "," println vy
           qvalue = new DValue
           qvalue.value = v
+          qvalue.dist = uvalue.dist + 1
           append(q, qvalue)
           dist[v] = new_cost
         }
       }
-    } else {
-      //println "too far"
     }
   }
 }
 
 endloc = endx + endy*width
-print "Startlo " println (startx + starty*width)
+print "Startloc " println (startx + starty*width)
 print "Endloc " println endloc
-djikstra:proc() {
-q=new DList
-//      for each vertex v in Graph.Vertices:
-//          dist[v] ← INFINITY
-//          add v to Q
-//      dist[source] ← 0
-//
-j = 0 while j < height do j = j + 1 {
-  i = 0 while i < width do i = i + 1 {
-    qvalue = new DValue
-    qvalue.value = i+j*width
-    if i == startx and j == starty {
-      dist[qvalue.value] = 0
-    } else {
-      dist[qvalue.value] = INFINITY
-    }
-    inq[qvalue.value] = true
-    append(q, qvalue)
-  }
-}
-  i = 0
-  while q.head != null {
-  // u ← vertex in Q with min dist[u]
-    u = findMin(q)
-    if u == endloc {
-      break
-    }
-  // remove u from Q
-    removeFromList(q, u)
-    inq[u] = false
-
-    // for each neighbor v of u still in Q:
-      processNeighbor(u, -1, 0)
-      processNeighbor(u, 1, 0)
-      processNeighbor(u, 0, -1)
-      processNeighbor(u, 0, 1)
-    i = i + 1
-    if (i%10) == 0 {
-    }
-  }
-}
 
 bfs:proc {
   j = 0 while j < height do j = j + 1 {
@@ -367,26 +287,24 @@ bfs:proc {
   q=new DList
   qvalue = new DValue
   qvalue.value = startx + starty*width
+  qvalue.dist = 0
   append(q, qvalue)
 
   while q.head != null {
     v = pop(q)
-//    print "Popped " println v.value
+    if seen[v.value] {
+      continue
+    }
     if v.value == endloc {
-//      break
+      print "Part 1: " println v.dist
+      break
     }
     seen[v.value] = true
 
-    // old_cost = distances.get(neighbor, float('inf'))
-    //              new_cost = distances[current_vertex] + STEP
-    //              if new_cost < old_cost:
-    //                  Q.append(neighbor)
-    //                  distances[neighbor] = new_cost
-
-    processNeighbor2(q, v.value, -1, 0)
-    processNeighbor2(q, v.value, 1, 0)
-    processNeighbor2(q, v.value, 0, -1)
-    processNeighbor2(q, v.value, 0, 1)
+    processNeighbor2(q, v, -1, 0)
+    processNeighbor2(q, v, 1, 0)
+    processNeighbor2(q, v, 0, -1)
+    processNeighbor2(q, v, 0, 1)
     println "Queue is now " printList(q)
  //   println "Dist is now" 
  //   printArr(dist)
