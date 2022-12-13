@@ -1,6 +1,7 @@
 .classpath
 .project
 *.exe
+*.out
 *.asm
 *.obj
 *.txt
