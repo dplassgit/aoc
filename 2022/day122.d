@@ -1,7 +1,4 @@
-atoi: extern proc(s:string):int
-
-// test this with other inputs, e.g.,
-// global_data = 'foo\nbar\n'
+// read everything all at once
 global_data=input
 
 next_line_loc=0
@@ -28,41 +25,6 @@ next_line: proc(): String {
   return null
 }
 
-countSplitParts: proc(s:string, div:string): int {
-  j = 0 i = 0 while i < length(s) do i = i + 1 {
-    if s[i] == div {
-      j = j + 1
-    }
-  }
-  return j
-}
-
-split_space: proc(s:string): string[] {
-  return split(s, ' ')
-}
-
-split: proc(s:string, div:string): string[] {
-  // TODO: use a DList for this
-  parts:string[countSplitParts(s, div) + 1]
-  sofar = ''
-  j = 0 i = 0 while i < length(s) do i = i + 1 {
-    ch = s[i]
-    // Uses asc for integer vs string comparison
-    if asc(ch) == asc(div) {
-      // found another one
-      parts[j] = sofar
-      j = j + 1
-      sofar = ''
-    } else {
-      sofar = sofar + ch
-    }
-  }
-  parts[j] = sofar
-  return parts
-}
-
-abs: proc(i:int):int { if i < 0 { return -i } return i }
-
 
 ////////////////////////////////////////////////////
 // LIST
@@ -82,14 +44,6 @@ printList: proc(list: DList) {
     }
   }
   println ""
-}
-
-push: proc(list: DList, value: DValue): DList {
-  e = new DEntry
-  e.value = value
-  e.next = list.head
-  list.head = e
-  return list
 }
 
 append: proc(list: DList, value: DValue): DList {
@@ -119,56 +73,8 @@ pop: proc(list: DList): DValue {
   return value
 }
 
-head: proc(list: DList): DValue {
-  if list.head == null {
-    exit "head of list is null"
-  }
-  return list.head.value
-}
 
-removeFromList: proc(list: DList, target: int):bool {
-  h = list.head
-  if h == null {
-    return false
-  }
-  if h.value.value == target {
-    // need to change head
-    list.head = h.next
-    return true
-  } else {
-
-    while h != null do h = h.next {
-      next = h.next
-      if next == null {
-        return false
-      }
-      if next.value.value == target {
-        // found it.
-        h.next = next.next
-        return true
-      }
-    }
-  }
-  return false
-}
-
-
-listContains: proc(list:DList, value: int): bool {
-  if list == null {
-    return false
-  }
-  return listEntryContains(list.head, value) 
-}
-
-listEntryContains: proc(head:DEntry, value: int): bool {
-  if head == null {
-    return false
-  }
-  if head.value.value == value {
-    return true
-  }
-  return listEntryContains(head.next, value)
-}
+// DAY 12 PART 2
 
 width=0
 height=0
@@ -180,8 +86,8 @@ line=next_line() while line != null do line = next_line() {
 reset_input()
 map:int[width*height]
 dist:int[width*height]
-inq:bool[width*height]
 seen:bool[width*height]
+
 
 j=0
 startx=0
@@ -222,8 +128,7 @@ printArr: proc(arr:int[]) {
     println ""
   }
 }
-printArr(map)
-
+// printArr(map)
 
 
 processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
@@ -254,16 +159,16 @@ processNeighbor2: proc(q:DList, uvalue: DValue, dx: int, dy: int) {
   }
 }
 
+
 endloc = endx + endy*width
-print "Startloc " println (startx + starty*width)
-print "Endloc " println endloc
 
 bfs:proc {
   q=new DList
   j = 0 while j < height do j = j + 1 {
     i = 0 while i < width do i = i + 1 {
       vloc = i + j*width
-      if map[vloc] == 0 {// all 'a's are good
+      if map[vloc] == 0 {
+        // add all 'a's to the queue, and they all are at distance 0
         qvalue = new DValue
         qvalue.value = vloc
         append(q, qvalue)
@@ -297,5 +202,5 @@ bfs:proc {
 
 bfs()
 println "After"
-printArr(dist)
+//printArr(dist)
 print "Part 2: " print dist[endx + endy*width]
