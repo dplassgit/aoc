@@ -5,13 +5,13 @@ https://adventofcode.com/2022
 I'm trying to use my own programming language, D, available at https://github.com/dplassgit/d2lang
 
 
-## Running from the deployjar
+## Running the D compiler from the deployjar
 
 ```shell
 java -jar D2Compiler_deploy.jar day2.d -o day2.exe
 ```
 
-## Compiling
+## Compiling with the D compiler
 
 First, compile the compiler:
 
@@ -27,3 +27,13 @@ Then the executable (directory) can be referenced absolutely:
 ```
 
 (I have a shell script to do it)
+
+
+## Typescript
+
+If you don't give an outfile, it writes to `input.js`.
+
+
+```shell
+npx tsc input.ts [--outfile alternate.js]
+```
