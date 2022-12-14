@@ -524,9 +524,9 @@ function compare(left, right) {
   return 0;
 }
 
-answer = 0;
-index = 1;
-it=BIG;
+let part1 = 0;
+let index = 1;
+const it=BIG;
 
 for (let i = 0; i < it.length; i += 2) {
   const left = it[i];
@@ -534,11 +534,34 @@ for (let i = 0; i < it.length; i += 2) {
   const comp = compare(left, right);
   //console.log(`FINAL RESULT: ${comp} for ${left} vs ${right}`);
   if (comp == -1) {
-    answer += index;
+    part1 += index;
   }
   index++;
 }
 
 
-//console.log(it);
-console.log("Part 1: " + answer);
+
+it.push([[2]]);
+it.push([[6]]);
+
+for (let i = 0; i < it.length; i++) {
+  for (let j = i+1; j < it.length; ++j) {
+    if (compare(it[i], it[j]) != -1) {
+      const temp = it[i];
+      it[i] = it[j];
+      it[j] = temp;
+    }
+  }
+}
+
+console.log(it);
+
+let part2=1;
+for (let i = 0; i < it.length; ++i) {
+  if (compare(it[i], [[2]]) == 0 || compare(it[i], [[6]]) == 0) {
+    part2 = part2 * (i + 1);
+  }
+}
+
+console.log("Part 1: " + part1);
+console.log("Part 2: " + part2);
