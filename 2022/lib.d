@@ -1,19 +1,18 @@
-atoi: extern proc(s:string):int
+////////////////////////////////////////////////////
+// Read data all at once
+////////////////////////////////////////////////////
+global_data = input
 
-// Read everything all at once
-global_data=input
-
-next_line_loc=0
-
+next_line_loc = 0
 reset_input: proc() {
   next_line_loc = 0
 }
 
 // Get the next line. Returns null at EOF.
 // NOTE: LAST LINE MUST END WITH \n
-next_line: proc(): String {
+next_line: proc: String {
   line = ''
-  len=length(global_data)
+  len = length(global_data)
   while next_line_loc < len {
     ch = global_data[next_line_loc]
     next_line_loc = next_line_loc + 1
@@ -27,7 +26,7 @@ next_line: proc(): String {
   return null
 }
 
-countSplitParts: proc(s:string, div:string): int {
+countSplitParts: proc(s: string, div: string): int {
   j = 0 i = 0 while i < length(s) do i = i + 1 {
     if s[i] == div {
       j = j + 1
@@ -36,11 +35,15 @@ countSplitParts: proc(s:string, div:string): int {
   return j
 }
 
-split_space: proc(s:string): string[] {
+
+////////////////////////////////////////////////////
+// SPLIT
+////////////////////////////////////////////////////
+split_space: proc(s: string): string[] {
   return split(s, ' ')
 }
 
-split: proc(s:string, div:string): string[] {
+split: proc(s: string, div: string): string[] {
   // TODO: use a DList for this
   parts:string[countSplitParts(s, div) + 1]
   sofar = ''
@@ -60,8 +63,6 @@ split: proc(s:string, div:string): string[] {
   return parts
 }
 
-abs: proc(i:int):int { if i < 0 { return -i } return i }
-
 
 ////////////////////////////////////////////////////
 // SET
@@ -70,15 +71,13 @@ DSet: record {
   buckets:DList[29]
 }
 
-PRIMES = [2,3,5,7,11]
+PRIMES = [2, 3, 5, 7, 11]
 NPRIMES = length(PRIMES)
 hashCode: proc(value: string): int {
   hash = 17 + length(value)
   i = 0 while i < length(value) do i = i + 1 {
     ch = value[i]
-    // NOTE: if value is an array of ints,
-    // use abs here
-    hash = hash + asc(ch) * PRIMES[i%NPRIMES]
+    hash = hash + abs(asc(ch) * PRIMES[i % NPRIMES])
   }
   return hash
 }
@@ -155,7 +154,6 @@ printSet: proc(set: DSet) {
 ////////////////////////////////////////////////////
 // LIST
 ////////////////////////////////////////////////////
-
 DValue:record { // your data here
   value:string
 }
@@ -191,9 +189,8 @@ append: proc(list: DList, value: DValue): DList {
     return list
   }
 
-  tail = list.head while tail.next != null do tail = tail.next {
-  }
-  // tail is really the tail
+  tail = list.head while tail.next != null do tail = tail.next {}
+  // tail is now the tail
   tail.next = newtail
   return list
 }
@@ -214,7 +211,7 @@ head: proc(list: DList): DValue {
   return list.head.value
 }
 
-removeFromList: proc(list: DList, target: string):bool {
+removeFromList: proc(list: DList, target: string): bool {
   h = list.head
   if h == null {
     return false
@@ -242,7 +239,7 @@ removeFromList: proc(list: DList, target: string):bool {
 
 // NOTE: if v is mutable, consider making a copy before
 // making the DValue
-string2DValue: proc(v:string): DValue {
+string2DValue: proc(v: string): DValue {
   dval = new DValue
   dval.value = v
   return dval
@@ -255,7 +252,7 @@ listContains: proc(list:DList, value: string): bool {
   return listEntryContains(list.head, value) 
 }
 
-listEntryContains: proc(head:DEntry, value: string): bool {
+listEntryContains: proc(head: DEntry, value: string): bool {
   if head == null {
     return false
   }
@@ -264,6 +261,23 @@ listEntryContains: proc(head:DEntry, value: string): bool {
   }
   return listEntryContains(head.next, value)
 }
+
+
+////////////////////////////////////////////////////
+// STRINGS AND NUMBERS
+////////////////////////////////////////////////////
+
+// return substring(i1 to end)
+substring: proc(s: string, start: int): string {
+  ns = ''
+  i = start while i < length(s) do i = i + 1 {
+    ns = ns + s[i]
+  }
+  return ns
+}
+
+atoi: extern proc(s: string): int
+abs: proc(i: int): int { if i < 0 { return -i } return i }
 
 
 ////////////////////////////////////////////////////

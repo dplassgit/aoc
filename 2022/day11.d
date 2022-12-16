@@ -371,10 +371,3 @@ j = 0 while j < 8 do j = j + 1 {
 }
 
 print "Part 1: " println top[0] * top[1]
-
-//s = new DSet
-//print "Should be false: " println setContains(s, 'hi')
-//print "Should be false: " println addToSet(s, 'hi')
-//printSet(s)
-//printList(allSetValues(s))
-//removeFromSet(s, 'ab')
