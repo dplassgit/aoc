@@ -1,4 +1,4 @@
-f = open('day18small.txt', 'r')
+f = open('day18.txt', 'r')
 lines = f.readlines()
 
 qubes=set()
@@ -11,12 +11,8 @@ for line in lines:
     hix = max(hix, int(x))
     hiy = max(hiy, int(y))
     hiz = max(hiz, int(z))
-    dim=max(dim,int(x))
-    dim=max(dim,int(y))
-    dim=max(dim,int(z))
     qubes.add((int(x),int(y),int(z)))
 
-dim=dim+1
 hix=hix+1
 hiy=hiy+1
 hiz=hiz+1
@@ -51,28 +47,31 @@ seen=set()
 # BFS
 while len(q)> 0:
     elt = q.pop()
-    #print("popped: ", elt)
+    # print("popped: ", elt)
     if elt in seen:
-        #print("already processed")
+        # print("already processed")
         continue
     seen.add(elt)
     if elt in qubes:
-        #print("is a qube")
+        # print("is a qube")
         continue
     # don't go back there
     (x,y,z)=elt
-    if x < 0 or y < 0 or z < 0 or x > dim or y > dim or z > dim:
-        #print("out of range")
+    if x < -1 or y < -1 or z < -1 or x > hix or y > hiy or z > hiz:
+        # print("out of range")
         continue
     for tx in [x-1,x+1]:
+        # print("Pushing ", (tx,y,z))
         q.append((tx,y,z))
         if (tx, y, z) in qubes:
             part2=part2+1
     for ty in [y-1,y+1]:
+        # print("Pushing ", (x,ty,z))
         q.append((x,ty,z))
         if (x, ty, z) in qubes:
             part2=part2+1
     for tz in [z-1,z+1]:
+        # print("Pushing ", (x,y,tz))
         q.append((x,y,tz))
         if (x, y, tz) in qubes:
             part2=part2+1
