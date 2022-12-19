@@ -5,17 +5,19 @@ qubes=set()
 hix=-1
 hiy=-1
 hiz=-1
-dim=-1
+lox=25
+loy=25
+loz=25
 for line in lines:
-    (x,y,z) = line.strip().split(',')
-    hix = max(hix, int(x))
-    hiy = max(hiy, int(y))
-    hiz = max(hiz, int(z))
-    qubes.add((int(x),int(y),int(z)))
+    [x,y,z] = [int(n) for n in line.strip().split(',')]
+    hix = max(hix, x)
+    hiy = max(hiy, y)
+    hiz = max(hiz, z)
+    lox = min(lox, x)
+    loy = min(loy, y)
+    loz = min(loz, z)
+    qubes.add((x,y,z))
 
-hix=hix+1
-hiy=hiy+1
-hiz=hiz+1
 print("max x, y, z", (hix, hiy, hiz))
 
 part1 = 0
@@ -57,7 +59,7 @@ while len(q)> 0:
         continue
     # don't go back there
     (x,y,z)=elt
-    if x < -1 or y < -1 or z < -1 or x > hix or y > hiy or z > hiz:
+    if x < lox-1 or y < loy-1 or z < loz-1 or x > hix+1 or y > hiy+1 or z > hiz+1:
         # print("out of range")
         continue
     for tx in [x-1,x+1]:
