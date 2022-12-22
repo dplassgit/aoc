@@ -87,21 +87,29 @@ public class Day16Test {
           + "Valve EZ has flow rate=0; tunnels lead to valves VQ, OM\r\n";
 
   @Test
-  public void bfs() {
-    Map<String, Node> nodes = Day16.parse(input.split("\n"));
-    Day16.updateDistances();
-    Day16.bfs();
+  public void smallPart1() {
+    Day16 d = new Day16(input.split("\n"));
+    int answer = d.part1();
+    assertThat(answer).isEqualTo(1651);
   }
 
   @Test
   public void updateBigDistances() {
-    Map<String, Node> nodes = Day16.parse(big.split("\r\n"));
-    Day16.updateDistances();
+    Day16 d = new Day16(big.split("\r\n"));
+    d.updateDistances();
+  }
+
+  @Test
+  public void bigPart1() {
+    Day16 d = new Day16(big.split("\r\n"));
+    int answer = d.part1();
+    assertThat(answer).isEqualTo(1873);
   }
 
   @Test
   public void parseAll() {
-    Map<String, Node> nodes = Day16.parse(input.split("\n"));
+    Day16 d = new Day16(input.split("\n"));
+    Map<String, Node> nodes = d.nodes;
     assertThat(nodes).hasSize(10);
     Node aa = nodes.get("AA");
     assertThat(aa.flowrate).isEqualTo(0);

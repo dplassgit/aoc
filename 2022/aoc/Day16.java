@@ -17,9 +17,25 @@ import com.google.common.collect.ImmutableSet;
 
 public class Day16 {
   private static final Splitter COMMA_SPLITTER = Splitter.on(",").trimResults();
-  static int distances[][];
 
-  static void updateDistances() {
+  Day16(String[] input) {
+    nodeArr = new Node[input.length];
+    int i = 0;
+    for (String line : input) {
+      Node node = parse(line);
+      nodeArr[i] = node;
+      node.index = i++;
+      nodes.put(node.name, node);
+    }
+    for (Node node : nodes.values()) {
+      node.neighbors =
+          node.neighborNames.stream().map(name -> nodes.get(name)).collect(toImmutableList());
+    }
+  }
+
+  int distances[][];
+
+  void updateDistances() {
     int len = nodes.size();
     distances = new int[len][len];
     for (int i = 0; i < len; ++i) {
@@ -84,8 +100,8 @@ public class Day16 {
     List<String> neighborNames = new ArrayList<>();
   }
 
-  static Node[] nodeArr;
-  static Map<String, Node> nodes = new HashMap<>();
+  Node[] nodeArr;
+  Map<String, Node> nodes = new HashMap<>();
 
   public static class State {
     public State(Node node, int time, int score, Set<String> opened, List<String> ordered) {
@@ -112,22 +128,6 @@ public class Day16 {
   static Pattern pattern =
       Pattern.compile("Valve ([A-Z][A-Z]) has flow rate=(\\d+); tunnels? leads? to valves? (.*)$");
 
-  static Map<String, Node> parse(String[] input) {
-    nodeArr = new Node[input.length];
-    int i = 0;
-    for (String line : input) {
-      Node node = parse(line);
-      nodeArr[i] = node;
-      node.index = i++;
-      nodes.put(node.name, node);
-    }
-    for (Node node : nodes.values()) {
-      node.neighbors =
-          node.neighborNames.stream().map(name -> nodes.get(name)).collect(toImmutableList());
-    }
-    return nodes;
-  }
-
   static Node parse(String input) {
     // Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE
     Node node = new Node();
@@ -140,7 +140,9 @@ public class Day16 {
     return node;
   }
 
-  static void bfs() {
+  int part1() {
+    updateDistances();
+
     List<State> queue = new ArrayList<>();
     queue.add(new State(nodes.get("AA"), 1, 0, ImmutableSet.of(), ImmutableList.of()));
     int best = 0;
@@ -179,5 +181,6 @@ public class Day16 {
     }
     System.out.println("Sequence: " + sequence);
     System.out.println("Max " + best);
+    return best;
   }
 }
