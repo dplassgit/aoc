@@ -12,7 +12,7 @@ for line in lines:
     right=None
 
     if parts[1].isnumeric():
-        value=int(parts[1])
+        value=float(parts[1])
     else:
         left=parts[1]
         op=parts[2]
@@ -38,9 +38,16 @@ for node in nodes.values():
     print(node)
 
 def reset():
+    global q 
+    q=[]
     for node in nodes.values():
+        if node[3] is None:
+            q.append(node)
+        else:
+            node[1] = None
         node[6] = None
         node[7] = None
+    #print(q)
 
 algo="""
 L ← Empty list that will contain the sorted elements
@@ -65,6 +72,7 @@ def onerun():
         #print("Head ", head)
         (name, value, left, op, right, deps, leftvalue, rightvalue) = head
         if name == 'root':
+            print("Returning root", head)
             return head
         for depname in deps:
             # tell each dependency about our number
@@ -76,7 +84,7 @@ def onerun():
                 if dep[7] == None and dep[4] == name:
                     dep[7] = value
                 #print("updated dep ", dep)
-                if isinstance(dep[6], int) and isinstance(dep[7], int):
+                if dep[6] is not None and dep[7] is not None: #isinstance(dep[6], int) and isinstance(dep[7], int):
                     # both are numbers, calculate our new number and add us to the queue.
                     newvalue = 0
                     op=dep[3]
@@ -87,19 +95,40 @@ def onerun():
                     elif op == '*':
                         newvalue = dep[6] * dep[7]
                     elif op == '/':
-                        newvalue = dep[6] // dep[7]
+                        newvalue = dep[6] / dep[7]
                     else:
                         print("UNKNOWN OP ", op)
                     dep[1]= newvalue
                     #print("adding updated dep ", dep)
                     q.append(dep)
         #print("queue is now ", q)
+    print("NO ROOT")
 
 humn=nodes['humn']
-print('Humn ', humn)
-root=onerun()
-print('Root ', root)
-while root[6] != root[7]:
-    if root[6] > root[7]:
-        humn[1]=
+low=0
+high=100000000000000
+while True:
+    mid = (high+low)/2
+    print("mid ", mid)
+    humn[1]=mid
+    reset()
+    #print(nodes)
+    root=onerun()
+    print('Root ', root)
+    humn=nodes['humn']
+    print('Humn ', humn)
+    left=root[6]
+    right=root[7]
+
+    diff = left-right
+    if abs(diff) < .001:
+        print("FOUND IT! humn: ", humn)
+        break
+    elif diff< 0:
+        print("Too high, making smaller: ", root[6], root[7])
+        high=mid-1
+    else:
+        print("Too small, making bigger: ", root[6], root[7])
+        low = mid+1
+
        
