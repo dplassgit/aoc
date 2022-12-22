@@ -6,3 +6,6 @@
 *.obj
 *.txt
 /bin/
+*/node_modules/
+*.json
+

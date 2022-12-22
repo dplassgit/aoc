@@ -61,19 +61,19 @@ public class Day16 {
       }
     }
 
-    //    System.out.printf("    ");
-    //    for (int i = 0; i < len; ++i) {
-    //      System.out.printf("%s ", nodeArr[i].name);
-    //    }
-    //    System.out.println();
-    //
-    //    for (int i = 0; i < len; ++i) {
-    //      System.out.printf("%s: ", nodeArr[i].name);
-    //      for (int j = 0; j < len; ++j) {
-    //        System.out.printf("%d  ", distances[i][j]);
-    //      }
-    //      System.out.println();
-    //    }
+    System.out.printf("    ");
+    for (int i = 0; i < len; ++i) {
+      System.out.printf("%s ", nodeArr[i].name);
+    }
+    System.out.println();
+
+    for (int i = 0; i < len; ++i) {
+      System.out.printf("%s: ", nodeArr[i].name);
+      for (int j = 0; j < len; ++j) {
+        System.out.printf("%d  ", distances[i][j]);
+      }
+      System.out.println();
+    }
   }
 
   public static class Node {
