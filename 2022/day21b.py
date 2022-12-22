@@ -33,9 +33,9 @@ for node in nodes.values():
         leftnode[5].append(node[0])
         rightnode[5].append(node[0])
 
-print("Values:")
-for node in nodes.values():
-    print(node)
+#print("Values:")
+#for node in nodes.values():
+#    print(node)
 
 def reset():
     global q 
@@ -72,19 +72,17 @@ def onerun():
         #print("Head ", head)
         (name, value, left, op, right, deps, leftvalue, rightvalue) = head
         if name == 'root':
-            print("Returning root", head)
+         #   print("Returning root", head)
             return head
         for depname in deps:
             # tell each dependency about our number
             dep = nodes[depname]
-            #print("dep  ", dep)
             if dep[1] is None:
                 if dep[6] == None and dep[2] == name:
                     dep[6] = value
                 if dep[7] == None and dep[4] == name:
                     dep[7] = value
-                #print("updated dep ", dep)
-                if dep[6] is not None and dep[7] is not None: #isinstance(dep[6], int) and isinstance(dep[7], int):
+                if dep[6] is not None and dep[7] is not None:
                     # both are numbers, calculate our new number and add us to the queue.
                     newvalue = 0
                     op=dep[3]
@@ -107,28 +105,31 @@ def onerun():
 humn=nodes['humn']
 low=0
 high=100000000000000
+iters=0
 while True:
     mid = (high+low)/2
-    print("mid ", mid)
     humn[1]=mid
     reset()
-    #print(nodes)
     root=onerun()
-    print('Root ', root)
-    humn=nodes['humn']
-    print('Humn ', humn)
+    # print('Root ', root)
+    # print('Humn ', humn)
     left=root[6]
     right=root[7]
 
     diff = left-right
     if abs(diff) < .001:
-        print("FOUND IT! humn: ", humn)
+        print("FOUND IT!:", humn)
+        print("Root:", root)
         break
     elif diff< 0:
-        print("Too high, making smaller: ", root[6], root[7])
+        # Too high, make smaller
         high=mid-1
     else:
-        print("Too small, making bigger: ", root[6], root[7])
+        # Too low, make bigger
         low = mid+1
+    iters = iters + 1
+
+print("Part 2:", int(humn[1]))
+print(iters, "Iterations")
 
        
