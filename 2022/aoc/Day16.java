@@ -12,7 +12,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 public class Day16 {
@@ -51,25 +50,12 @@ public class Day16 {
         distances[from][to] = 1;
       }
     }
-    //    System.out.printf("    ");
-    //    for (int i = 0; i < len; ++i) {
-    //      System.out.printf("%s ", nodeArr[i].name);
-    //    }
-    //    System.out.println();
-    //
-    //    for (int i = 0; i < len; ++i) {
-    //      System.out.printf("%s: ", nodeArr[i].name);
-    //      for (int j = 0; j < len; ++j) {
-    //        System.out.printf("%d  ", distances[i][j]);
-    //      }
-    //      System.out.println();
-    //    }
+    printMatrix(len);
 
     // FW
     for (int k = 0; k < len; ++k) {
       for (int i = 0; i < len; ++i) {
         for (int j = 0; j < len; ++j) {
-          // DAVUQ?
           if (distances[i][j] > distances[i][k] + distances[k][j]) {
             distances[i][j] = distances[i][k] + distances[k][j];
           }
@@ -77,6 +63,10 @@ public class Day16 {
       }
     }
 
+    printMatrix(len);
+  }
+
+  private void printMatrix(int len) {
     System.out.printf("    ");
     for (int i = 0; i < len; ++i) {
       System.out.printf("%s ", nodeArr[i].name);
@@ -104,25 +94,22 @@ public class Day16 {
   Map<String, Node> nodes = new HashMap<>();
 
   public static class State {
-    public State(Node node, int time, int score, Set<String> opened, List<String> ordered) {
+    public State(Node node, int time, int score, Set<String> opened) {
       this.node = node;
       this.time = time;
       this.score = score;
       this.opened = opened;
-      this.ordered = ordered;
     }
 
     @Override
     public String toString() {
-      return String.format(
-          "Node: %s T: %d Score %d opened %s", node.name, time, score, ordered.toString());
+      return String.format("Node: %s T: %d Score %d opened %s", node.name, time, score);
     }
 
     Node node;
     int time;
     int score;
     Set<String> opened;
-    List<String> ordered;
   }
 
   static Pattern pattern =
@@ -144,34 +131,27 @@ public class Day16 {
     updateDistances();
 
     List<State> queue = new ArrayList<>();
-    queue.add(new State(nodes.get("AA"), 1, 0, ImmutableSet.of(), ImmutableList.of()));
+    queue.add(new State(nodes.get("AA"), 1, 0, ImmutableSet.of()));
     int best = 0;
-    List<String> sequence = null;
     while (!queue.isEmpty()) {
       State head = queue.remove(0);
       //      System.out.printf("Popped %s\n", head);
       if (head.score > best) {
         best = Math.max(best, head.score);
-        sequence = head.ordered;
-        //        System.out.println("Best so far: " + sequence);
+        //        System.out.println("Best so far: " + best);
       }
-      //      List<Node> neighbors = head.node.neighbors;
-      // do we look at ALL neighbors?
+      // look at ALL nodes
       for (Node n : nodes.values()) {
-        // 1. find neighbors
-        // 2. remove opened neighbors
-        // 3. remove neighbors we can't get to in time
+        // Only use openable nodes
         if (n.flowrate > 0 && !head.opened.contains(n.name)) {
           int distance = distances[head.node.index][n.index]; // distnace between 'head' and 'node'
           int newtime = head.time + distance + 1;
           if (newtime <= 30) {
-            // newtime - 1?
+            // We can get there in time.
             int newscore = head.score + (31 - newtime) * n.flowrate;
             Set<String> newopened = new HashSet<String>(head.opened);
             newopened.add(n.name);
-            List<String> newordered = new ArrayList<String>(head.ordered);
-            newordered.add(n.name);
-            State newState = new State(n, newtime, newscore, newopened, newordered);
+            State newState = new State(n, newtime, newscore, newopened);
             //            System.out.printf("Pushing %s\n", newState);
             queue.add(newState);
           }
@@ -179,7 +159,42 @@ public class Day16 {
       }
       //      System.out.printf("Queue: %s\n", queue);
     }
-    System.out.println("Sequence: " + sequence);
+    System.out.println("Max " + best);
+    return best;
+  }
+
+  int part1() {
+    updateDistances();
+
+    List<State> queue = new ArrayList<>();
+    queue.add(new State(nodes.get("AA"), 1, 0, ImmutableSet.of()));
+    int best = 0;
+    while (!queue.isEmpty()) {
+      State head = queue.remove(0);
+      //      System.out.printf("Popped %s\n", head);
+      if (head.score > best) {
+        best = Math.max(best, head.score);
+        //        System.out.println("Best so far: " + best);
+      }
+      // look at ALL nodes
+      for (Node n : nodes.values()) {
+        // Only use openable nodes
+        if (n.flowrate > 0 && !head.opened.contains(n.name)) {
+          int distance = distances[head.node.index][n.index]; // distnace between 'head' and 'node'
+          int newtime = head.time + distance + 1;
+          if (newtime <= 30) {
+            // We can get there in time.
+            int newscore = head.score + (31 - newtime) * n.flowrate;
+            Set<String> newopened = new HashSet<String>(head.opened);
+            newopened.add(n.name);
+            State newState = new State(n, newtime, newscore, newopened);
+            //            System.out.printf("Pushing %s\n", newState);
+            queue.add(newState);
+          }
+        }
+      }
+      //      System.out.printf("Queue: %s\n", queue);
+    }
     System.out.println("Max " + best);
     return best;
   }
