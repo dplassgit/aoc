@@ -28,11 +28,6 @@ def leftmost(s):
     else:
         return min(pound, dot)
 
-def rightmost(s):
-    dot=s.rfind('.')
-    pound=s.rfind('#')
-    return max(pound, dot)
-
 maze=[]
 width=0
 # find max width
@@ -63,13 +58,9 @@ print(instructions)
 print("Starting at", x, y)
 
 steps = instructions.strip().split(" ")
-RIGHT=0
-DOWN=1
-LEFT=2
-UP=3
 dirnames=['right', 'down', 'left', 'up']
 arrow=['>', 'v', '<', '^']
-facing=RIGHT
+facing=0 # right
 # dx, dy for right, down, left, up
 deltas=((1, 0), (0, 1), (-1, 0), (0, -1))
 
@@ -100,14 +91,14 @@ for step in steps:
         # if we go too far left, wrap to right, etc.
         (nx, ny) = bump_xy(facing, x, y)
         while maze[ny][nx] == ' ':
-            print("saw a space at ", nx, ny)
+            # print("saw a space at ", nx, ny)
             # Keep going, modulo wraparound
             (nx, ny) = bump_xy(facing, nx, ny)
 
         # see if we can go to the next step
         if maze[ny][nx] == '#':
             # stop
-            print("Found a block at ", nx, ny, 'stopping at ', x, y ,'instead.')
+            # print("Found a block at ", nx, ny, 'stopping at ', x, y ,'instead.')
             break
         x = nx
         y = ny
