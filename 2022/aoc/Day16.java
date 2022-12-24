@@ -162,40 +162,4 @@ public class Day16 {
     System.out.println("Max " + best);
     return best;
   }
-
-  int part1() {
-    updateDistances();
-
-    List<State> queue = new ArrayList<>();
-    queue.add(new State(nodes.get("AA"), 1, 0, ImmutableSet.of()));
-    int best = 0;
-    while (!queue.isEmpty()) {
-      State head = queue.remove(0);
-      //      System.out.printf("Popped %s\n", head);
-      if (head.score > best) {
-        best = Math.max(best, head.score);
-        //        System.out.println("Best so far: " + best);
-      }
-      // look at ALL nodes
-      for (Node n : nodes.values()) {
-        // Only use openable nodes
-        if (n.flowrate > 0 && !head.opened.contains(n.name)) {
-          int distance = distances[head.node.index][n.index]; // distnace between 'head' and 'node'
-          int newtime = head.time + distance + 1;
-          if (newtime <= 30) {
-            // We can get there in time.
-            int newscore = head.score + (31 - newtime) * n.flowrate;
-            Set<String> newopened = new HashSet<String>(head.opened);
-            newopened.add(n.name);
-            State newState = new State(n, newtime, newscore, newopened);
-            //            System.out.printf("Pushing %s\n", newState);
-            queue.add(newState);
-          }
-        }
-      }
-      //      System.out.printf("Queue: %s\n", queue);
-    }
-    System.out.println("Max " + best);
-    return best;
-  }
 }
