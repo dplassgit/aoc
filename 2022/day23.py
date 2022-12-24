@@ -100,31 +100,40 @@ def oneround(dir):
                 proposals[elf].append(elf)
     #print("proposals:", proposals)
     newworld = set()
+    changed=False
     for newplace in proposals:
         elflist = proposals[newplace]
         #print("elflist", elflist)
         if len(elflist) == 1:
             # only one - we can go to the new place
             newworld.add(newplace)
+            if newplace != elflist[0]:
+                changed = True
         else:
             # they stay at their old places
             for other in elflist:
                 newworld.add(other)
     #print("newworld:", newworld)
     elves=newworld
+    return changed
 
 
 def part1():
     startdir=0
-    print("Initial:")
-    printit()
-    for round in range(10):
-        print("Round", round)
-        oneround(startdir)
-        printit()
+    #print("Initial:")
+    #printit()
+    part1=0
+    for round in range(1000):
+        changed = oneround(startdir)
+        print("Round", (round+1), ", changed", changed)
+        if round == 9:
+            part1=printit()
+            print("After 10 rounds:", part1)
         startdir = (startdir + 1) % 4
-
+        if not changed:
+            printit()
+            print("Part2", round+1)
+            break
     
 part1()
-print(printit())
 
