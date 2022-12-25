@@ -43,15 +43,14 @@ function dfs(here:number, sofar:number, distancetohere:number): number {
   if (sofar == all) {
     return distancetohere;
   }
-
   // see which of the unused cities to pick next would work best
-  let best=1000000;
+  let best=-1;
   for (var city = 1; city < maxcode; city = city * 2) {
     if ((sofar & city) == 0) {
       // not seen
       const thisdist = edges.get(here | city);
       const totaldist = dfs(city, sofar|city, distancetohere+thisdist);
-      if (totaldist < best) {
+      if (totaldist > best) {
         best = totaldist;
       }
     }
@@ -60,11 +59,11 @@ function dfs(here:number, sofar:number, distancetohere:number): number {
 }
 
 
-let part1 = 1000000;
+let part1 = -1;
 for (var city = 1; city < maxcode; city = city * 2) {
   const fromhere=dfs(city, city, 0);
   console.log("best starting at " + names.get(city) + " is " + fromhere);
-  if (fromhere < part1) {
+  if (fromhere > part1) {
     part1 = fromhere;
   }
 }
