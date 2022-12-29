@@ -51,9 +51,7 @@ function dfs(here:number, sofar:number, distancetohere:number): number {
       // not seen
       const thisdist = edges.get(here | city);
       const totaldist = dfs(city, sofar|city, distancetohere+thisdist);
-      if (totaldist < best) {
-        best = totaldist;
-      }
+      best = Math.min(best, totaldist);
     }
   }
   return best;
@@ -64,8 +62,6 @@ let part1 = 1000000;
 for (var city = 1; city < maxcode; city = city * 2) {
   const fromhere=dfs(city, city, 0);
   console.log("best starting at " + names.get(city) + " is " + fromhere);
-  if (fromhere < part1) {
-    part1 = fromhere;
-  }
+  part1 = Math.min(part1, fromhere);
 }
 console.log(part1);
