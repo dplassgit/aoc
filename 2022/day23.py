@@ -125,14 +125,14 @@ def part1():
     part1=0
     for round in range(1000):
         changed = oneround(startdir)
-        print("Round", (round+1), ", changed", changed)
+        # print("Round", (round+1), ", changed", changed)
         if round == 9:
             part1=printit()
-            print("After 10 rounds:", part1)
         startdir = (startdir + 1) % 4
         if not changed:
             printit()
-            print("Part2", round+1)
+            print("Part 1:", part1)
+            print("Part 2:", round+1)
             break
     
 part1()
