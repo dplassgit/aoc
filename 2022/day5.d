@@ -135,9 +135,8 @@ x = next_line() while length(x) > 0 do x = next_line() {
  }
 }
 
-i = 1 while i < 10 do i = i + 1 {
-  printList(stacks[i])
-}
+println "BEFORE:"
+printStacks()
 
 // skip blank
 next_line()
@@ -160,12 +159,18 @@ x = next_line() while x != null do x = next_line() {
   process_command(count, from, to)
 }
 
-println "AFTER:"
-i = 1 while i < 10 do i = i + 1 {
-  printList(stacks[i])
+printStacks: proc {
+  i = 1 while i < 10 do i = i + 1 {
+    printList(stacks[i])
+  }
 }
 
+println "AFTER:"
+printStacks()
+
+print "PART 1:"
 i = 1 while i < 10 do i = i + 1 {
   print(head(stacks[i]).value)
 }
+println ""
 
