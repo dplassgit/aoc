@@ -8,13 +8,13 @@ skip=False
 for line in f:
     if not skip:
       line = line.strip()
-      print line
+      print(line)
       if line[column % len(line)] == '#':
           trees = trees+1
       column = column + 1
     skip = not skip
 
-print trees
+print(trees)
 # r1,d1 60
 # r3,d1 191
 # r5,d1 64

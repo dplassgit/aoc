@@ -9,7 +9,7 @@ reset_input: proc() {
 
 // Get the next line. Returns null at EOF.
 // NOTE: LAST LINE MUST END WITH \n
-next_line: proc(): String {
+next_line: proc(): string {
   line = ''
   len=length(global_data)
   while next_line_loc < len {

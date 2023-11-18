@@ -14,7 +14,7 @@ for line in f:
     if len(line) == 0:
         # end of previous passport
         missing = [k for k in required if k not in passport]
-        print missing, passport
+        print(missing, passport)
         if not missing:
             # no missing fields.
             valid=True
