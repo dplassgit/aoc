@@ -25,6 +25,13 @@ dcc day2.d -o day2.exe --save-temps
 day2.exe < day2.txt
 ```
 
+## Using the assembly language library (lib.asm)
+
+
+```shell
+nasm -fwin64 ../lib/lib.asm -o lib.obj && dcc day1b.d -c && gcc day1b.obj lib.obj -o day1b.exe
+./day1b.exe < day1.txt
+```
 
 
 ## Javascript
