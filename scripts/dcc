@@ -1,0 +1,1 @@
+~/dev/d2lang/bazel-bin/src/com/plasstech/lang/d2/D2Compiler.exe $*

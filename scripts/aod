@@ -1,0 +1,1 @@
+nasm -fwin64 ../lib/lib.asm -o lib.obj && ../scripts/dcc $1.d -c --save-temps && gcc $1.obj lib.obj -o $1.exe && ./$1.exe < $2
