@@ -34,20 +34,21 @@ answer = 0
 line = next_line() while line != null do line = next_line() {
   number = 0
   i = 0 while i < length(line) do i++ {
-    c = line[i]
-    if c >= '0' and c <= '9' {
-      number = asc(c)-asc('0')
+    c = asc(line[i])-48
+    if c >= 0 and c <= 9 {
+      number = c
       break
     }
   }
   number=number*10
   i = length(line)-1 while i >= 0 do i-- {
-    c = line[i]
-    if c >= '0' and c <= '9' {
-      number = number + asc(c)-asc('0')
+    c = asc(line[i])-48
+    if c >= 0 and c <= 9 {
+      number = number + c
       break
     }
   }
+  print line print ": " println number
   answer = answer + number
 }
 
