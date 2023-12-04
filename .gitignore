@@ -2,6 +2,7 @@
 .project
 *.exe
 *.out
+*/out
 *.asm
 *.obj
 *.txt
