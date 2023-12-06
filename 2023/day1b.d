@@ -1,8 +1,7 @@
 // TO BUILD:
 
 // nasm -fwin64 lib.asm -o lib.obj
-// dcc day1b.d -c
-// gcc day1b.obj lib.obj -o day1b.exe
+// dcc day1b.d -l lib.obj
 // ./day1b.exe < day1.txt
 
 
@@ -40,7 +39,7 @@ next_line: proc: String {
 ////////////////////////////////////////////////////
 
 ifind: extern proc(haystack: string, needle: string): int
-strrev: extern proc(haystack:string): string
+strrev: extern proc(s:string): string
 
 find: proc(haystack: string, needle: string): int {
   return ifind(haystack, needle)
