@@ -10,4 +10,7 @@
 /bin/
 */node_modules/
 *.json
+*.i
+*.o
+*.s
 
