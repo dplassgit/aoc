@@ -3,8 +3,8 @@ lines = f.readlines()
 lines = [line.strip() for line in lines]
 
 cards="AKQJT98765432"
-# cards, bid, type, rank
-hands = [[line.split()[0], int(line.split()[1]), 0, 0] for line in lines]
+# cards, bid, type
+hands = [[line.split()[0], int(line.split()[1]), 0] for line in lines]
 #for hand in hands: print(hand)
 
 for hand in hands:
