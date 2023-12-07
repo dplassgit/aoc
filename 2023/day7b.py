@@ -3,24 +3,13 @@ lines = f.readlines()
 lines = [line.strip() for line in lines]
 
 cards="AKQT98765432J"
-# cards, bid, type, rank
-hands = [[line.split()[0], int(line.split()[1]), 0, 0] for line in lines]
+# cards, bid, type
+hands = [[line.split()[0], int(line.split()[1]), 0] for line in lines]
 #for hand in hands: print(hand)
-
-types = [
-        'do not use',
-        'junk',
-        'pair',
-        'two pair',
-        '3 of a kind',
-        'full house',
-        '4 of a kind',
-        '5 of a kind']
-
 
 for hand in hands:
     h=[0]*13
-    js = 0
+    js = 0 # joker count
     for card in hand[0]:
         ci = cards.find(card)
         if card == 'J':
@@ -56,7 +45,7 @@ for hand in hands:
         # 3 of a kind -> 4 of a kind (QQQJx or JJJQx
         elif t == 4:
             t = 6
-        # 2 pair -> full house or 4 of a kind??? (QQTTJ or QQJJx)
+        # 2 pair -> full house or 4 of a kind (QQTTJ or QQJJx)
         elif t == 3 and js==1:
             # QQTTJ:
             t=5 # full house
@@ -71,10 +60,6 @@ for hand in hands:
             t=4
         else: # nothing, now we have one pair
             t = 2
-            #print(hand)
-            #print("WTH, did nothing with jokers?")
-            #exit(-1)
-        print("Hand with jokers %s was '%s', now '%s'" % (hand, types[ot], types[t]))
     hand[3] = t
     #print(hand)
     #print(h)
@@ -99,7 +84,7 @@ def compare(left, right):
     return 0
 
 
-# now do fancy sort. Note, can't use hands.sort because I'm not smart enough.
+# now do a fancy sort. Note, can't use hands.sort because I'm not smart enough.
 for i in range(0, len(hands)):
     for j in range(i+1, len(hands)):
         if compare(hands[i], hands[j]) > 0:
