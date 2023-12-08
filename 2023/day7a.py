@@ -4,7 +4,7 @@ lines = [line.strip() for line in lines]
 
 cards="AKQJT98765432"
 # cards, bid, type
-hands = [[line.split()[0], int(line.split()[1]), 0] for line in lines]
+hands = [[part[0], int(part[1]), 0] for part in [line.split() for line in lines]]
 #for hand in hands: print(hand)
 
 for hand in hands:
@@ -28,7 +28,7 @@ for hand in hands:
         t = 2
     else:
         t = 1
-    hand[3] = t
+    hand[2] = t
     #print(hand)
     #print(h)
     #print(t)
@@ -38,9 +38,9 @@ for hand in hands: print(hand)
 
 # return 1 for left>right, -1 for left < right.
 def compare(left, right):
-    if left[3] > right[3]:
+    if left[2] > right[2]:
         return 1
-    if left[3] < right[3]:
+    if left[2] < right[2]:
         return -1
     # now compare individual cards
     for (a, b) in zip(left[0], right[0]):
@@ -69,5 +69,5 @@ for hand in hands:
     answer = answer + hand[1] * rank
     rank = rank + 1
 
-print("Day 7: %d" % answer)
+print("Day 7 part 1: %d" % answer)
 
