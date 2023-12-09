@@ -31,5 +31,5 @@ for r in range(0, len(times)):
             wins = wins + 1
     answer = answer * wins
 
-print("Day 6: %d" % answer)
+print("Day 6 part 1: %d" % answer)
 

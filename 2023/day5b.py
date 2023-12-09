@@ -40,6 +40,7 @@ def traverse(seed):
     return seed
 
 answer = 99999999999999999999
+# THIS NEVER COMPLETES DO NOT USE
 for i in range(0, len(seeds), 2):
     # traverse the map
     start = seeds[i]

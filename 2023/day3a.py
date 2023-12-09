@@ -69,7 +69,3 @@ for line in lines:
 
 
 print("Answer = %d" % answer)
-
-#for r in range(0, rows):
-#    print(adj[r])
-

@@ -32,5 +32,5 @@ while nodename != 'ZZZ':
     else:
         nodename = node[1]
 
-print("Day 8 part a: %d" % answer)
+print("Day 8 part 1: %d" % answer)
 

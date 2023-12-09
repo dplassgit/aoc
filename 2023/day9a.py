@@ -8,26 +8,24 @@ def all_zeros(lst):
 answer = 0
 for line in lines:
     parts = [int(x) for x in line.split()]
-    #print(parts)
+
+    # Iterations
     iters=[parts]
     olddiffs = parts
-    while True:
-        diffs = [0]*(len(olddiffs)-1)
+    while not all_zeros(olddiffs):
+        # All zeros
+        diffs = [0] * (len(olddiffs) - 1)
         for i in range(1, len(olddiffs)):
             diffs[i-1] = olddiffs[i] - olddiffs[i-1]
         iters.insert(0, diffs)
-        if all_zeros(diffs):
-            break
         olddiffs = diffs
     #print(iters)
-    # now rebuild the thing
 
-    print(iters)
-    p = iters[0][-1]# prediction
+    p = 0  # prediction
     for i in range(1, len(iters)):
-        lst = iters[i] # this is the next row
+        lst = iters[i] # this is the "next" row
         mylast = lst[-1] # the last one in our row
-        p = p + mylast # add the last one in our row to the last prediction (?)
+        p = mylast + p # add the last one in our row to the last prediction
         #print("new prediction %d" % p)
 
     answer += p
