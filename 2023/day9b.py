@@ -2,9 +2,6 @@ f = open('day9.txt', 'r')
 lines = f.readlines()
 lines = [line.strip() for line in lines]
 
-def all_zeros(lst):
-    return len([x for x in lst if x != 0]) == 0
-
 answer = 0
 for line in lines:
     parts = [int(x) for x in line.split()]
@@ -12,7 +9,7 @@ for line in lines:
     # Iterations
     iters=[parts]
     olddiffs = parts
-    while not all_zeros(olddiffs):
+    while not all([x==0 for x in olddiffs]):
         diffs = [0] * (len(olddiffs) - 1)
         for i in range(1, len(olddiffs)):
             diffs[i-1] = olddiffs[i] - olddiffs[i-1]
