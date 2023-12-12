@@ -7,14 +7,8 @@ height=len(lines)
 
 dots='.'*width
 
-blank_rows=[]
-stars=[]
-for y in range(height):
-    if lines[y]==dots:
-        blank_rows.append(y)
-    for x in range(width):
-        if lines[y][x] == '#':
-            stars.append((x, y))
+blank_rows=[y for y in range(height) if lines[y]==dots]
+stars=[(x, y) for y in range(height) for x in range(width) if lines[y][x] == '#']
 
 #print("rows: %s" % blank_rows)
 #print(stars)
@@ -25,16 +19,14 @@ for line in lines:
     for i in range(width):
         if line[i] =='.':
             counts[i]=counts[i]+1
-blank_columns=[]
-for c in range(width):
-    if counts[c] == height:
-        blank_columns.append(c)
+blank_columns=[c for c in range(width) if counts[c] == height]
+
 #print("cols: %s" % blank_columns)
 
-for i in range(2):
+for k in range(2):
     answer = 0
-    bump=[1, 999999][i]
-    for i in range(len(stars)-1):
+    bump=[1, 999999][k]
+    for i in range(len(stars)):
         for j in range(i+1, len(stars)):
             # find temp distance
             dist = abs(stars[i][0] - stars[j][0])+abs(stars[i][1]-stars[j][1])
@@ -47,5 +39,5 @@ for i in range(2):
                     dist += bump
             answer += dist
 
-    print("Day 11 part %d: %d" % (i+1,answer))
+    print("Day 11 part %d: %d" % (k+1, answer))
 
